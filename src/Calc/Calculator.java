@@ -119,26 +119,26 @@ public final class Calculator extends javax.swing.JFrame {
         if (Float.isNaN(curr) || Float.isNaN(prev)) {
             return;
         }
-
-        switch (this.operation) {
-            case "+" ->
-                computation = prev + curr;
-            case "-" ->
-                computation = prev - curr;
-            case "×" ->
-                computation = prev * curr;
-            case "÷" -> {
-                if (curr == 0) {
-                    this.clear();
-                    this.currentOperand = "Error";
-                    return;
-                }
-                computation = prev / curr;
-            }
-            default -> {
-                return;
-            }
-        }
+//
+//        switch (this.operation) {
+//            case "+" ->
+//                computation = prev + curr;
+//            case "-" ->
+//                computation = prev - curr;
+//            case "×" ->
+//                computation = prev * curr;
+//            case "÷" -> {
+//                if (curr == 0) {
+//                    this.clear();
+//                    this.currentOperand = "Error";
+//                    return;
+//                }
+//                computation = prev / curr;
+//            }
+//            default -> {
+//                return;
+//            }
+//        }
 
         this.currentOperand = (computation - (int) computation) != 0 ? Float.toString(computation) : Integer.toString((int) computation);
         this.previousOperand = "";
