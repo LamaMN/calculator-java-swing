@@ -11,130 +11,131 @@ import operations.OperationFactory;
  *
  * @author youcefhmd
  */
-
 public final class Calculator extends javax.swing.JFrame {
 
-	// Singleton Instance
-	private static Calculator instance;
+    // Singleton Instance
+    private static Calculator instance;
 
-	private String currentOperand;
-	private String previousOperand;
-	private String operation;
-	private int x, y;
+    private String currentOperand;
+    private String previousOperand;
+    private String operation;
+    private int x, y;
 
-	// Singleton Constructor
-	private Calculator() {
-		initComponents();
-		getContentPane().setSize(400, 700);
-		clear();
-		addEvents();
-	}
+    // Singleton Constructor
+    private Calculator() {
+        initComponents();
+        getContentPane().setSize(400, 700);
+        clear();
+        addEvents();
+    }
 
-	public static Calculator getInstance() {
-		if (instance == null) {
-			instance = new Calculator();
-		}
-		return instance;
-	}
+    public static Calculator getInstance() {
+        if (instance == null) {
+            instance = new Calculator();
+        }
+        return instance;
+    }
 
-	public void addEvents() {
-		JButton[] btns = { btn0, btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8, btn9, btnDiv, btnDot, btnEqual, btnDel,
-				btnMult, btnPlus, btnPlusSub, btnSub, btnClear };
+    public void addEvents() {
+        JButton[] btns = {btn0, btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8, btn9, btnDiv, btnDot, btnEqual, btnDel,
+            btnMult, btnPlus, btnPlusSub, btnSub, btnClear};
 
-		JButton[] numbers = { btn0, btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8, btn9 };
+        JButton[] numbers = {btn0, btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8, btn9};
 
-		for (JButton number : numbers) {
-			number.addActionListener(e -> appendNumber(((JButton) e.getSource()).getText()));
-		}
+        for (JButton number : numbers) {
+            number.addActionListener(e -> appendNumber(((JButton) e.getSource()).getText()));
+        }
 
-		for (JButton btn : btns) {
-			btn.addMouseListener(new MouseAdapter() {
-				@Override
-				public void mouseEntered(MouseEvent e) {
-					((JButton) e.getSource()).setBackground(new Color(73, 69, 78));
-				}
+        for (JButton btn : btns) {
+            btn.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseEntered(MouseEvent e) {
+                    ((JButton) e.getSource()).setBackground(new Color(73, 69, 78));
+                }
 
-				@Override
-				public void mouseExited(MouseEvent e) {
-					JButton b = (JButton) e.getSource();
-					if (b == btnDiv || b == btnEqual || b == btnDel || b == btnMult || b == btnSub || b == btnPlus
-							|| b == btnClear)
-						b.setBackground(new Color(41, 39, 44));
-					else
-						b.setBackground(new Color(21, 20, 22));
-				}
-			});
-		}
-	}
+                @Override
+                public void mouseExited(MouseEvent e) {
+                    JButton b = (JButton) e.getSource();
+                    if (b == btnDiv || b == btnEqual || b == btnDel || b == btnMult || b == btnSub || b == btnPlus
+                            || b == btnClear) {
+                        b.setBackground(new Color(41, 39, 44));
+                    } else {
+                        b.setBackground(new Color(21, 20, 22));
+                    }
+                }
+            });
+        }
+    }
 
+    public void clear() {
+        currentOperand = "";
+        previousOperand = "";
+        operation = "";
+        updateDisplay();
+    }
 
-	public void clear() {
-		currentOperand = "";
-		previousOperand = "";
-		operation = "";
-		updateDisplay();
-	}
+    public void appendNumber(String number) {
+        if (currentOperand.equals("0") && number.equals("0")) {
+            return;
+        }
+        if (number.equals(".") && currentOperand.contains(".")) {
+            return;
+        }
 
-	public void appendNumber(String number) {
-		if (currentOperand.equals("0") && number.equals("0"))
-			return;
-		if (number.equals(".") && currentOperand.contains("."))
-			return;
+        if (currentOperand.equals("0") && !number.equals("0") && !number.equals(".")) {
+            currentOperand = "";
+        }
 
-		if (currentOperand.equals("0") && !number.equals("0") && !number.equals(".")) {
-			currentOperand = "";
-		}
+        currentOperand += number;
+        updateDisplay();
+    }
 
-		currentOperand += number;
-		updateDisplay();
-	}
+    public void chooseOperation(String op) {
+        if (currentOperand.isEmpty() && !previousOperand.isEmpty()) {
+            operation = op;
+            updateDisplay();
+            return;
+        }
+        if (currentOperand.isEmpty()) {
+            return;
+        }
 
-	public void chooseOperation(String op) {
-		if (currentOperand.isEmpty() && !previousOperand.isEmpty()) {
-			operation = op;
-			updateDisplay();
-			return;
-		}
-		if (currentOperand.isEmpty())
-			return;
+        if (!previousOperand.isEmpty()) {
+            compute();
+        }
 
-		if (!previousOperand.isEmpty())
-			compute();
+        operation = op;
+        previousOperand = currentOperand;
+        currentOperand = "";
+        updateDisplay();
+    }
 
-		operation = op;
-		previousOperand = currentOperand;
-		currentOperand = "";
-		updateDisplay();
-	}
+    public void compute() {
+        try {
+            double prev = Double.parseDouble(previousOperand);
+            double current = Double.parseDouble(currentOperand);
 
-	public void compute() {
-		try {
-			double prev = Double.parseDouble(previousOperand);
-			double current = Double.parseDouble(currentOperand);
+            // Use Facade instead of directly calling the factory
+            CalculatorFacade facade = new CalculatorFacade();
+            double result = facade.calculate(prev, current, operation);
 
-			Operation op = OperationFactory.performOperation(operation);
-			if (op == null)
-				return;
+            currentOperand = String.valueOf(result);
+            previousOperand = "";
+            operation = "";
+        } catch (ArithmeticException e) {
+            currentOperand = "Error";
+        } catch (NumberFormatException e) {
+            currentOperand = "";
+        }
+    }
 
-			double result = op.calculate(prev, current);
+    public void updateDisplay() {
+        current.setText(currentOperand);
+        previous.setText(previousOperand + " " + operation);
+    }
 
-			currentOperand = String.valueOf(result);
-			previousOperand = "";
-			operation = "";
-		} catch (ArithmeticException e) {
-			currentOperand = "Error";
-		} catch (NumberFormatException e) {
-			currentOperand = "";
-		}
-	}
-
-	public void updateDisplay() {
-		current.setText(currentOperand);
-		previous.setText(previousOperand + " " + operation);
-	}
-
-	@SuppressWarnings("unchecked")
-	// <editor-fold defaultstate="collapsed" desc="Generated
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated
 	// Code">//GEN-BEGIN:initComponents
 	private void initComponents() {
 
@@ -558,88 +559,89 @@ public final class Calculator extends javax.swing.JFrame {
 		pack();
 	}// </editor-fold>//GEN-END:initComponents
 
-	private void btnDotActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnDotActionPerformed
-		appendNumber((this.currentOperand.isBlank() ? "0." : "."));
-	}// GEN-LAST:event_btnDotActionPerformed
+    private void btnDotActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnDotActionPerformed
+        appendNumber((this.currentOperand.isBlank() ? "0." : "."));
+    }// GEN-LAST:event_btnDotActionPerformed
 
-	private void btnClearActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnClearActionPerformed
-		clear();
-	}// GEN-LAST:event_btnClearActionPerformed
+    private void btnClearActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnClearActionPerformed
+        clear();
+    }// GEN-LAST:event_btnClearActionPerformed
 
-	private void btnDelActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnDelActionPerformed
-		if (!this.currentOperand.equals("")) {
-			this.currentOperand = this.currentOperand.substring(0, this.currentOperand.length() - 1);
-			this.updateDisplay();
-		}
-	}// GEN-LAST:event_btnDelActionPerformed
+    private void btnDelActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnDelActionPerformed
+        if (!this.currentOperand.equals("")) {
+            this.currentOperand = this.currentOperand.substring(0, this.currentOperand.length() - 1);
+            this.updateDisplay();
+        }
+    }// GEN-LAST:event_btnDelActionPerformed
 
-	private void btnPlusActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnPlusActionPerformed
-		chooseOperation("+");
-	}// GEN-LAST:event_btnPlusActionPerformed
+    private void btnPlusActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnPlusActionPerformed
+        chooseOperation("+");
+    }// GEN-LAST:event_btnPlusActionPerformed
 
-	private void btnMultActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnMultActionPerformed
-		chooseOperation("×");
-	}// GEN-LAST:event_btnMultActionPerformed
+    private void btnMultActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnMultActionPerformed
+        chooseOperation("×");
+    }// GEN-LAST:event_btnMultActionPerformed
 
-	private void btnSubActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnSubActionPerformed
-		chooseOperation("-");
-	}// GEN-LAST:event_btnSubActionPerformed
+    private void btnSubActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnSubActionPerformed
+        chooseOperation("-");
+    }// GEN-LAST:event_btnSubActionPerformed
 
-	private void btnDivActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnDivActionPerformed
-		chooseOperation("÷");
-	}// GEN-LAST:event_btnDivActionPerformed
+    private void btnDivActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnDivActionPerformed
+        chooseOperation("÷");
+    }// GEN-LAST:event_btnDivActionPerformed
 
-	private void btnEqualActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnEqualActionPerformed
-		this.compute();
-		this.updateDisplay();
-		if (this.currentOperand.equals("Error"))
-			this.currentOperand = "";
-	}// GEN-LAST:event_btnEqualActionPerformed
+    private void btnEqualActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnEqualActionPerformed
+        this.compute();
+        this.updateDisplay();
+        if (this.currentOperand.equals("Error")) {
+            this.currentOperand = "";
+        }
+    }// GEN-LAST:event_btnEqualActionPerformed
 
-	private void btnPlusSubActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnPlusSubActionPerformed
-		if (!this.currentOperand.isBlank()) {
-			float tmp = -Float.parseFloat(this.currentOperand);
-			this.currentOperand = (tmp - (int) tmp) != 0 ? Float.toString(tmp) : Integer.toString((int) tmp);
-			this.updateDisplay();
-		}
-	}// GEN-LAST:event_btnPlusSubActionPerformed
+    private void btnPlusSubActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnPlusSubActionPerformed
+        if (!this.currentOperand.isBlank()) {
+            float tmp = -Float.parseFloat(this.currentOperand);
+            this.currentOperand = (tmp - (int) tmp) != 0 ? Float.toString(tmp) : Integer.toString((int) tmp);
+            this.updateDisplay();
+        }
+    }// GEN-LAST:event_btnPlusSubActionPerformed
 
-	private void btnCloseMouseEntered(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_btnCloseMouseEntered
-		btnClose.setBackground(new Color(255, 75, 75));
-		btnClose.setForeground(new Color(31, 30, 33));
-	}// GEN-LAST:event_btnCloseMouseEntered
+    private void btnCloseMouseEntered(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_btnCloseMouseEntered
+        btnClose.setBackground(new Color(255, 75, 75));
+        btnClose.setForeground(new Color(31, 30, 33));
+    }// GEN-LAST:event_btnCloseMouseEntered
 
-	private void btnCloseMouseExited(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_btnCloseMouseExited
-		btnClose.setBackground(new Color(21, 20, 22));
-		btnClose.setForeground(Color.WHITE);
-	}// GEN-LAST:event_btnCloseMouseExited
+    private void btnCloseMouseExited(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_btnCloseMouseExited
+        btnClose.setBackground(new Color(21, 20, 22));
+        btnClose.setForeground(Color.WHITE);
+    }// GEN-LAST:event_btnCloseMouseExited
 
-	private void btnMiniMouseEntered(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_btnMiniMouseEntered
-		btnMini.setBackground(new Color(73, 69, 78));
-	}// GEN-LAST:event_btnMiniMouseEntered
+    private void btnMiniMouseEntered(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_btnMiniMouseEntered
+        btnMini.setBackground(new Color(73, 69, 78));
+    }// GEN-LAST:event_btnMiniMouseEntered
 
-	private void btnMiniMouseExited(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_btnMiniMouseExited
-		btnMini.setBackground(new Color(21, 20, 22));
-	}// GEN-LAST:event_btnMiniMouseExited
+    private void btnMiniMouseExited(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_btnMiniMouseExited
+        btnMini.setBackground(new Color(21, 20, 22));
+    }// GEN-LAST:event_btnMiniMouseExited
 
-	private void btnCloseActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnCloseActionPerformed
-		System.exit(0);
-	}// GEN-LAST:event_btnCloseActionPerformed
+    private void btnCloseActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnCloseActionPerformed
+        System.exit(0);
+    }// GEN-LAST:event_btnCloseActionPerformed
 
-	private void btnMiniActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnMiniActionPerformed
-		setState(Calculator.ICONIFIED);
-	}// GEN-LAST:event_btnMiniActionPerformed
+    private void btnMiniActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnMiniActionPerformed
+        setState(Calculator.ICONIFIED);
+    }// GEN-LAST:event_btnMiniActionPerformed
 
-	private void titleBarMousePressed(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_titleBarMousePressed
-		x = evt.getX();
-		y = evt.getY();
-	}// GEN-LAST:event_titleBarMousePressed
+    private void titleBarMousePressed(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_titleBarMousePressed
+        x = evt.getX();
+        y = evt.getY();
+    }// GEN-LAST:event_titleBarMousePressed
 
-	private void titleBarMouseDragged(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_titleBarMouseDragged
-		int xx = evt.getXOnScreen();
-		int yy = evt.getYOnScreen();
-		this.setLocation(xx - x, yy - y);
-	}// GEN-LAST:event_titleBarMouseDragged
+    private void titleBarMouseDragged(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_titleBarMouseDragged
+        int xx = evt.getXOnScreen();
+        int yy = evt.getYOnScreen();
+        this.setLocation(xx - x, yy - y);
+    }// GEN-LAST:event_titleBarMouseDragged
 
 	// Variables declaration - do not modify//GEN-BEGIN:variables
 	private javax.swing.JPanel app;
