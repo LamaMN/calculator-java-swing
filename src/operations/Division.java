@@ -1,5 +1,7 @@
 package operations;
 
+import creational.Operation;
+
 public class Division implements Operation {
 
 	@Override

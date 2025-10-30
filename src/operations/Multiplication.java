@@ -1,6 +1,8 @@
 package operations;
 
-class Multiplication implements Operation {
+import creational.Operation;
+
+public class Multiplication implements Operation {
 
 	@Override
 	public double calculate(double a, double b) {

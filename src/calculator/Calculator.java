@@ -4,8 +4,9 @@ import java.awt.Color;
 import java.awt.event.*;
 import javax.swing.JButton;
 
-import operations.Operation;
-import operations.OperationFactory;
+import creational.Operation;
+import creational.OperationFactory;
+import structural.CalculatorFacade;
 
 /**
  *

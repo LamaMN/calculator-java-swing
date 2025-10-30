@@ -1,4 +1,9 @@
-package operations;
+package creational;
+
+import operations.Addition;
+import operations.Division;
+import operations.Multiplication;
+import operations.Subtraction;
 
 public class OperationFactory {
 
