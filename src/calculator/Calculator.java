@@ -7,6 +7,8 @@ import javax.swing.JButton;
 import creational.Operation;
 import creational.OperationFactory;
 import structural.CalculatorFacade;
+import structural.HoverDecorator;
+import structural.ScaleHoverDecorator;
 
 /**
  *
@@ -27,7 +29,7 @@ public final class Calculator extends javax.swing.JFrame {
         initComponents();
         getContentPane().setSize(400, 700);
         clear();
-        addEvents();
+        addEventsWithDecorators();
     }
 
     public static Calculator getInstance() {
@@ -37,36 +39,36 @@ public final class Calculator extends javax.swing.JFrame {
         return instance;
     }
 
-    public void addEvents() {
-        JButton[] btns = {btn0, btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8, btn9, btnDiv, btnDot, btnEqual, btnDel,
-            btnMult, btnPlus, btnPlusSub, btnSub, btnClear};
+    public void addEventsWithDecorators() {
+    	 JButton[] numbers = { btn0, btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8, btn9 };
+    	    JButton[] operations = { btnDiv, btnMult, btnSub, btnPlus, btnEqual, btnClear, btnDel };
 
-        JButton[] numbers = {btn0, btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8, btn9};
+    	    // Number buttons: Color + Font scale
+    	    for (JButton number : numbers) {
+    	        number.addActionListener(e -> appendNumber(((JButton) e.getSource()).getText()));
+    	        HoverDecorator.applyNumberHover(number);
+    	        new ScaleHoverDecorator(number, 1.2f);  // Font 20% bigger
+    	    }
 
-        for (JButton number : numbers) {
-            number.addActionListener(e -> appendNumber(((JButton) e.getSource()).getText()));
-        }
+    	    // Operation buttons: Color + Font scale
+    	    for (JButton op : operations) {
+    	        HoverDecorator.applyOperationHover(op);
+    	        new ScaleHoverDecorator(op, 1.3f);  // Font 30% bigger
+    	    }
 
-        for (JButton btn : btns) {
-            btn.addMouseListener(new MouseAdapter() {
-                @Override
-                public void mouseEntered(MouseEvent e) {
-                    ((JButton) e.getSource()).setBackground(new Color(73, 69, 78));
-                }
+    	    // Special buttons
+    	    HoverDecorator.applyNumberHover(btnDot);
+    	    new ScaleHoverDecorator(btnDot, 1.2f);
+    	    
+    	    HoverDecorator.applyNumberHover(btnPlusSub);
+    	    new ScaleHoverDecorator(btnPlusSub, 1.2f);
 
-                @Override
-                public void mouseExited(MouseEvent e) {
-                    JButton b = (JButton) e.getSource();
-                    if (b == btnDiv || b == btnEqual || b == btnDel || b == btnMult || b == btnSub || b == btnPlus
-                            || b == btnClear) {
-                        b.setBackground(new Color(41, 39, 44));
-                    } else {
-                        b.setBackground(new Color(21, 20, 22));
-                    }
-                }
-            });
-        }
-    }
+    	    // Window buttons (color only, no font scaling)
+    	    HoverDecorator.applyCloseButtonHover(btnClose);
+    	    HoverDecorator.applyMinimizeButtonHover(btnMini);
+
+    	    getMouseMotionListeners();
+    	}
 
     public void clear() {
         currentOperand = "";
