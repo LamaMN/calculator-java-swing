@@ -3,11 +3,21 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Remas/Documents/GitHub/calculator-java-swing/src/calculator/CalculatorFacade.java</file>
-            <file>file:/C:/Users/Remas/Documents/GitHub/calculator-java-swing/src/operations/RoundingDecorator.java</file>
+            <file>file:/C:/Users/Remas/Documents/GitHub/calculator-java-swing/src/structural/HoverDecorator.java</file>
+            <file>file:/C:/Users/Remas/Documents/GitHub/calculator-java-swing/src/creational/Operation.java</file>
+            <file>file:/C:/Users/Remas/Documents/GitHub/calculator-java-swing/src/creational/OperationFactory.java</file>
             <file>file:/C:/Users/Remas/Documents/GitHub/calculator-java-swing/src/calculator/Calculator.java</file>
+            <file>file:/C:/Users/Remas/Documents/GitHub/calculator-java-swing/src/structural/UIDecorator.java</file>
+            <file>file:/C:/Users/Remas/Documents/GitHub/calculator-java-swing/src/structural/ScaleHoverDecorator.java</file>
+            <file>file:/C:/Users/Remas/Documents/GitHub/calculator-java-swing/src/calculator/Main.java</file>
+            <file>file:/C:/Users/Remas/Documents/GitHub/calculator-java-swing/src/creational/CalculatorButtonBuilder.java</file>
+            <file>file:/C:/Users/Remas/Documents/GitHub/calculator-java-swing/src/structural/CalculatorFacade.java</file>
+            <file>file:/C:/Users/Remas/Documents/GitHub/calculator-java-swing/src/operations/Multiplication.java</file>
             <file>file:/C:/Users/Remas/Documents/GitHub/calculator-java-swing/src/operations/Addition.java</file>
-            <file>file:/C:/Users/Remas/Documents/GitHub/calculator-java-swing/src/operations/OperationDecorator.java</file>
+            <file>file:/C:/Users/Remas/Documents/GitHub/calculator-java-swing/src/operations/Division.java</file>
+            <file>file:/C:/Users/Remas/Documents/GitHub/calculator-java-swing/src/structural/OperationDecorator.java</file>
+            <file>file:/C:/Users/Remas/Documents/GitHub/calculator-java-swing/src/structural/RoundingDecorator.java</file>
+            <file>file:/C:/Users/Remas/Documents/GitHub/calculator-java-swing/src/operations/Subtraction.java</file>
         </group>
     </open-files>
 </project-private>
