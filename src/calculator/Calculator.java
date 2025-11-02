@@ -262,21 +262,21 @@ public final class Calculator extends JFrame {
 		for (JButton number : numbers) {
 			number.addActionListener(e -> appendNumber(((JButton) e.getSource()).getText()));
 			HoverDecorator.applyNumberHover(number);
-			new ScaleHoverDecorator(number, 1.2f); // Font 20% bigger
+			new ScaleHoverDecorator(number, 1.2f).apply(); // Font 20% bigger
 		}
 
 		// Operation buttons: Color + Font scale
 		for (JButton op : operations) {
 			HoverDecorator.applyOperationHover(op);
-			new ScaleHoverDecorator(op, 1.3f); // Font 30% bigger
+			new ScaleHoverDecorator(op, 1.3f).apply(); // Font 30% bigger
 		}
 
 		// Special buttons
 		HoverDecorator.applyNumberHover(btnDot);
-		new ScaleHoverDecorator(btnDot, 1.2f);
+		new ScaleHoverDecorator(btnDot, 1.2f).apply();
 
 		HoverDecorator.applyNumberHover(btnPlusSub);
-		new ScaleHoverDecorator(btnPlusSub, 1.2f);
+		new ScaleHoverDecorator(btnPlusSub, 1.2f).apply();
 
 		// Window buttons (color only, no font scaling)
 		HoverDecorator.applyCloseButtonHover(btnClose);
