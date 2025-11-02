@@ -34,11 +34,19 @@ public final class Calculator extends JFrame {
     private JTextField current, previous;
     private JLabel title;
 
+<<<<<<< Updated upstream
     // Calculator buttons
     private JButton btn0, btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8, btn9;
     private JButton btnPlus, btnSub, btnMult, btnDiv, btnEqual;
     private JButton btnClear, btnDel, btnDot, btnPlusSub;
     private JButton btnClose, btnMini;
+=======
+	// Calculator buttons
+	private JButton btn0, btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8, btn9;
+	private JButton btnMod, btnPlus, btnSub, btnMult, btnDiv, btnEqual;
+	private JButton btnClear, btnDel, btnDot, btnPlusSub;
+	private JButton btnClose, btnMini;
+>>>>>>> Stashed changes
 
     private Calculator() {
         initComponents(); // Create panels first
@@ -147,6 +155,7 @@ public final class Calculator extends JFrame {
         setSize(320, 530);
     }
 
+<<<<<<< Updated upstream
     /**
      * Rebuild all buttons using the Builder Pattern
      */
@@ -163,6 +172,15 @@ public final class Calculator extends JFrame {
         btn8 = CalculatorButtonBuilder.createNumberButton("8");
         btn9 = CalculatorButtonBuilder.createNumberButton("9");
         btnDot = CalculatorButtonBuilder.createNumberButton(".");
+=======
+		// OPERATION BUTTONS
+		btnMod = CalculatorButtonBuilder.createOperationButton("%");
+		btnPlus = CalculatorButtonBuilder.createOperationButton("+");
+		btnSub = CalculatorButtonBuilder.createOperationButton("-");
+		btnMult = CalculatorButtonBuilder.createOperationButton("×");
+		btnDiv = CalculatorButtonBuilder.createOperationButton("÷");
+		btnEqual = CalculatorButtonBuilder.createOperationButton("=");
+>>>>>>> Stashed changes
 
         // OPERATION BUTTONS
         btnPlus = new CalculatorButtonBuilder("+").ofType(CalculatorButtonBuilder.ButtonType.OPERATION)
@@ -197,6 +215,7 @@ public final class Calculator extends JFrame {
         btnDiv.setBounds(160, 20, 70, 70);
         btnMult.setBounds(230, 20, 70, 70);
 
+<<<<<<< Updated upstream
         // Row 2: 7, 8, 9, Sub
         btn7.setBounds(20, 90, 70, 70);
         btn8.setBounds(90, 90, 70, 70);
@@ -208,17 +227,55 @@ public final class Calculator extends JFrame {
         btn5.setBounds(90, 160, 70, 70);
         btn6.setBounds(160, 160, 70, 70);
         btnPlus.setBounds(230, 160, 70, 140);
+=======
+		// Row 3: 4, 5, 6, Plus
+		btn4.setBounds(20, 160, 70, 70);
+		btn5.setBounds(90, 160, 70, 70);
+		btn6.setBounds(160, 160, 70, 70);
+		btnPlus.setBounds(230, 160, 70, 70);
+
+		// Row 4: 1, 2, 3
+		btn1.setBounds(20, 230, 70, 70);
+		btn2.setBounds(90, 230, 70, 70);
+		btn3.setBounds(160, 230, 70, 70);
+		btnMod.setBounds(230, 230, 70, 70);
+>>>>>>> Stashed changes
 
         // Row 4: 1, 2, 3
         btn1.setBounds(20, 230, 70, 70);
         btn2.setBounds(90, 230, 70, 70);
         btn3.setBounds(160, 230, 70, 70);
 
+<<<<<<< Updated upstream
         // Row 5: +/-, 0, ., =
         btnPlusSub.setBounds(20, 300, 70, 70);
         btn0.setBounds(90, 300, 70, 70);
         btnDot.setBounds(160, 300, 70, 70);
         btnEqual.setBounds(230, 300, 70, 70);
+=======
+		// Add all buttons
+		buttonsPanel.add(btnDel);
+		buttonsPanel.add(btnClear);
+		buttonsPanel.add(btnDiv);
+		buttonsPanel.add(btnMult);
+		buttonsPanel.add(btn7);
+		buttonsPanel.add(btn8);
+		buttonsPanel.add(btn9);
+		buttonsPanel.add(btnSub);
+		buttonsPanel.add(btn4);
+		buttonsPanel.add(btn5);
+		buttonsPanel.add(btn6);
+		buttonsPanel.add(btnPlus);
+		buttonsPanel.add(btn1);
+		buttonsPanel.add(btn2);
+		buttonsPanel.add(btn3);
+		buttonsPanel.add(btnMod);
+		buttonsPanel.add(btnPlusSub);
+		buttonsPanel.add(btn0);
+		buttonsPanel.add(btnDot);
+		buttonsPanel.add(btnEqual);
+	}
+>>>>>>> Stashed changes
 
         // Add all buttons
         buttonsPanel.add(btnDel);
@@ -249,6 +306,7 @@ public final class Calculator extends JFrame {
         btnMini.setBounds(260, 0, 30, 30);
         btnClose.setBounds(290, 0, 30, 30);
 
+<<<<<<< Updated upstream
         titleBar.add(btnMini);
         titleBar.add(btnClose);
     }
@@ -280,13 +338,57 @@ public final class Calculator extends JFrame {
             // Slightly larger scale for visibility
             new ScaleHoverDecorator(op, 1.3f).apply();
         }
+=======
+	/**
+	 * Add events with Decorator Pattern for hover effects
+	 */
+	public void addEventsWithDecorators() {
+		JButton[] numbers = { btn0, btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8, btn9 };
+		JButton[] operations = { btnDiv, btnMult, btnSub, btnPlus, btnEqual, btnClear, btnDel, btnMod };
+
+		// Number buttons: Color + Font scale
+		for (JButton number : numbers) {
+			number.addActionListener(e -> appendNumber(((JButton) e.getSource()).getText()));
+			HoverDecorator.applyNumberHover(number);
+			new ScaleHoverDecorator(number, 1.2f); // Font 20% bigger
+		}
+
+		// Operation buttons: Color + Font scale
+		for (JButton op : operations) {
+			HoverDecorator.applyOperationHover(op);
+			new ScaleHoverDecorator(op, 1.3f); // Font 30% bigger
+		}
+
+		// Special buttons
+		HoverDecorator.applyNumberHover(btnDot);
+		new ScaleHoverDecorator(btnDot, 1.2f);
+
+		HoverDecorator.applyNumberHover(btnPlusSub);
+		new ScaleHoverDecorator(btnPlusSub, 1.2f);
+
+		// Window buttons (color only, no font scaling)
+		HoverDecorator.applyCloseButtonHover(btnClose);
+		HoverDecorator.applyMinimizeButtonHover(btnMini);
+
+		getMouseMotionListeners();
+		addActionListeners();
+	}
+>>>>>>> Stashed changes
 
         // ⚙️ Special buttons (dot and +/-)
         new HoverDecorator(btnDot, new Color(73, 69, 78)).apply();
         new ScaleHoverDecorator(btnDot, 1.2f).apply();
 
+<<<<<<< Updated upstream
         new HoverDecorator(btnPlusSub, new Color(73, 69, 78)).apply();
         new ScaleHoverDecorator(btnPlusSub, 1.2f).apply();
+=======
+		btnPlus.addActionListener(e -> chooseOperation("+"));
+		btnMod.addActionListener(e -> chooseOperation("%"));
+		btnSub.addActionListener(e -> chooseOperation("-"));
+		btnMult.addActionListener(e -> chooseOperation("×"));
+		btnDiv.addActionListener(e -> chooseOperation("÷"));
+>>>>>>> Stashed changes
 
         // 🪟 Window control buttons (close & minimize)
         new HoverDecorator(btnClose, new Color(255, 75, 75), new Color(31, 30, 33)).apply();

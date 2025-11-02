@@ -2,6 +2,7 @@ package creational;
 
 import operations.Addition;
 import operations.Division;
+import operations.Modulo;
 import operations.Multiplication;
 import operations.Subtraction;
 
@@ -13,6 +14,7 @@ public class OperationFactory {
 		case "-" -> new Subtraction();
 		case "×" -> new Multiplication();
 		case "÷" -> new Division();
+		case "%" -> new Modulo();
 		default -> throw new IllegalArgumentException("Unknown operator: " + operator);
 		};
 	}
