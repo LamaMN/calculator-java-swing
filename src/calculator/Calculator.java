@@ -11,8 +11,6 @@ import javax.swing.JTextField;
 import javax.swing.WindowConstants;
 
 import creational.CalculatorButtonBuilder;
-import creational.Operation;
-import creational.OperationFactory;
 import structural.CalculatorFacade;
 import structural.HoverDecorator;
 import structural.ScaleHoverDecorator;
@@ -21,6 +19,7 @@ import structural.ScaleHoverDecorator;
  *
  * @author youcefhmd
  */
+@SuppressWarnings("serial")
 public final class Calculator extends JFrame {
 
 	private static Calculator instance;
