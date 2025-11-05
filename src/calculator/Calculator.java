@@ -363,11 +363,18 @@ public final class Calculator extends JFrame {
 	}
 
 	public void compute() {
+		if (currentOperand.isEmpty() || previousOperand.isEmpty()) {
+			return;
+		}
+
 		try {
 			double prev = Double.parseDouble(previousOperand);
 			double curr = Double.parseDouble(currentOperand);
-			CalculatorFacade facade = new CalculatorFacade(true);
+
+			// Use Facade - it handles Factory, RoundingDecorator, LoggingDecorator
+			CalculatorFacade facade = new CalculatorFacade(true); // Enable logging
 			double result = facade.calculate(prev, curr, operation);
+
 			currentOperand = String.valueOf(result);
 			previousOperand = "";
 			operation = "";
@@ -377,6 +384,7 @@ public final class Calculator extends JFrame {
 			currentOperand = "";
 		}
 	}
+	
 
 	public void updateDisplay() {
 		current.setText(currentOperand);

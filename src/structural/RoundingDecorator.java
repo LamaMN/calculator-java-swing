@@ -19,6 +19,6 @@ public class RoundingDecorator extends OperationDecorator {
     @Override
     public double calculate(double a, double b) {
         double result = super.calculate(a, b);
-        return Math.round(result * 100.0) / 100.0; // round to 2 decimal places
+        return Math.round(result * 1_000_000.0) / 1_000_000.0; // round to 6 decimal places
     }
 }

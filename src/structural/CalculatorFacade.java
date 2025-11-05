@@ -20,92 +20,41 @@ import creational.OperationFactory;
 */
 
 /**
- * Facade Pattern: Simplifies calculator operation logic Hides complexity of
- * Factory + Decorator pattern from UI
+ * Facade Pattern: Simplifies calculator operation logic
+ * Applies decorators (Rounding, Logging) automatically
  */
+
 public class CalculatorFacade {
 
-	private boolean enableLogging = false;
-	private static final String LOG_FILE = "calculator_log.txt";
+    private boolean enableLogging = false;
 
-	public CalculatorFacade() {
-	}
+    public CalculatorFacade() {
+    }
 
-	public CalculatorFacade(boolean enableLogging) {
-		this.enableLogging = enableLogging;
-	}
+    public CalculatorFacade(boolean enableLogging) {
+        this.enableLogging = enableLogging;
+    }
 
-	public double calculate(double a, double b, String operator) {
-		try {
-			if (enableLogging) {
-				logToConsole("Calculating: " + a + " " + operator + " " + b);
-			}
+    public double calculate(double a, double b, String operator) {
+        try {
+            // Step 1: Use Factory to get operation
+            Operation operation = OperationFactory.performOperation(operator);
 
-			// Use factory to create the right operation
-			Operation operation = OperationFactory.performOperation(operator);
+            // Step 2: Apply Rounding Decorator
+            operation = new RoundingDecorator(operation);
 
-			// Apply decorators dynamically
-			operation = new RoundingDecorator(operation);
+            // Step 3: Apply Logging Decorator (if enabled)
+            if (enableLogging) {
+                operation = new LoggingDecorator(operation, operator);
+            }
 
-			// Execute
-			double result = operation.calculate(a, b);
-
-			if (enableLogging) {
-				logToConsole("Result: " + result);
-				logToFile(a, operator, b, result); // Save to file
-			}
-
-			return result;
-		} catch (Exception e) {
-			if (enableLogging) {
-				logToConsole("Error: " + e.getMessage());
-				logToFile("Error: " + e.getMessage());
-			}
-			return Double.NaN;
-		}
-	}
-
-	/**
-	 * Log to console (standard output)
-	 */
-	private void logToConsole(String message) {
-		System.out.println(message);
-	}
-
-	/**
-	 * Log to file with timestamp
-	 */
-	private void logToFile(double a, String operator, double b, double result) {
-		try (PrintWriter writer = new PrintWriter(new FileWriter(LOG_FILE, true))) {
-			String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-			writer.println(String.format("[%s] %s %s %s = %s", timestamp, a, operator, b, result));
-		} catch (IOException e) {
-			System.err.println("Failed to write to log file: " + e.getMessage());
-		}
-	}
-
-	/**
-	 * Log error message to file
-	 */
-	private void logToFile(String errorMessage) {
-		try (PrintWriter writer = new PrintWriter(new FileWriter(LOG_FILE, true))) {
-			String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-			writer.println(String.format("[%s] %s", timestamp, errorMessage));
-		} catch (IOException e) {
-			System.err.println("Failed to write to log file: " + e.getMessage());
-		}
-	}
-
-	/**
-	 * Clear the log file
-	 */
-	public static void clearLog() {
-		try (PrintWriter writer = new PrintWriter(new FileWriter(LOG_FILE, false))) {
-			writer.println("=== Calculator Log ===");
-			writer.println("Log started: " + LocalDateTime.now());
-			writer.println();
-		} catch (IOException e) {
-			System.err.println("Failed to clear log file: " + e.getMessage());
-		}
-	}
+            // Step 4: Execute and return
+            return operation.calculate(a, b);
+        } catch (Exception e) {
+            if (enableLogging) {
+                System.err.println("Calculation error: " + e.getMessage());
+            }
+            return Double.NaN;
+        }
+    }
 }
