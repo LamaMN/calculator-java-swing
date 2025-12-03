@@ -73,97 +73,77 @@ public final class Calculator extends JFrame {
         return instance;
     }
 
-    /**
-     * Initialize main UI components (panels, text fields)
-     */
-    private void initComponents() {
-        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Calculator - " + currentTheme.getThemeName() + " Theme");
-        setLocation(500, 100);
-        setUndecorated(true);
-        setResizable(false);
+/**
+ * Initialize UI components WITHOUT any styling
+ * All styling delegated to applyThemeToComponents()
+ */
+private void initComponents() {
+    setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+    setTitle("Calculator - " + currentTheme.getThemeName() + " Theme");
+    setLocation(500, 100);
+    setUndecorated(true);
+    setResizable(false);
 
-        // Main app panel
-        app = new JPanel();
-        app.setBackground(new Color(13, 12, 20));
-        app.setForeground(new Color(40, 40, 40));
-        app.setLayout(null);
-        app.setBounds(0, 0, 320, 530);
+    app = new JPanel();
+    app.setLayout(null);
+    app.setBounds(0, 0, 320, 530);
 
-        // Results panel
-        resultsPanel = new JPanel();
-        resultsPanel.setBackground(new Color(34, 34, 34));
-        resultsPanel.setForeground(new Color(57, 57, 57));
-        resultsPanel.setLayout(null);
-        resultsPanel.setBounds(0, 30, 320, 110);
+    resultsPanel = new JPanel();
+    resultsPanel.setLayout(null);
+    resultsPanel.setBounds(0, 30, 320, 110);
 
-        // Previous operand display
-        previous = new JTextField();
-        previous.setEditable(false);
-        previous.setBackground(new Color(21, 20, 22));
-        previous.setFont(new Font("Century Gothic", Font.BOLD, 18));
-        previous.setForeground(new Color(203, 198, 213));
-        previous.setHorizontalAlignment(JTextField.RIGHT);
-        previous.setBorder(null);
-        previous.setBounds(0, 0, 320, 50);
+    previous = new JTextField();
+    previous.setEditable(false);
+    previous.setHorizontalAlignment(JTextField.RIGHT);
+    previous.setBorder(null);
+    previous.setBounds(0, 0, 320, 50);
 
-        // Current operand display
-        current = new JTextField();
-        current.setEditable(false);
-        current.setBackground(new Color(41, 39, 44));
-        current.setFont(new Font("Century Gothic", Font.BOLD, 24));
-        current.setForeground(Color.WHITE);
-        current.setHorizontalAlignment(JTextField.RIGHT);
-        current.setBorder(null);
-        current.setBounds(0, 50, 320, 60);
+    current = new JTextField();
+    current.setEditable(false);
+    current.setHorizontalAlignment(JTextField.RIGHT);
+    current.setBorder(null);
+    current.setBounds(0, 50, 320, 60);
 
-        resultsPanel.add(previous);
-        resultsPanel.add(current);
-        app.add(resultsPanel);
+    resultsPanel.add(previous);
+    resultsPanel.add(current);
+    app.add(resultsPanel);
 
-        // Buttons panel
-        buttonsPanel = new JPanel();
-        buttonsPanel.setBackground(new Color(21, 20, 22));
-        buttonsPanel.setLayout(null);
-        buttonsPanel.setBounds(0, 140, 320, 390);
-        app.add(buttonsPanel);
+    buttonsPanel = new JPanel();
+    buttonsPanel.setLayout(null);
+    buttonsPanel.setBounds(0, 140, 320, 460);  
+    app.add(buttonsPanel);
 
-        // Title bar
-        titleBar = new JPanel();
-        titleBar.setBackground(new Color(21, 20, 22));
-        titleBar.setLayout(null);
-        titleBar.setBounds(0, 0, 320, 30);
+    titleBar = new JPanel();
+    titleBar.setLayout(null);
+    titleBar.setBounds(0, 0, 320, 30);
 
-        // Title label
-        title = new JLabel("Calculator");
-        title.setFont(new Font("Century Gothic", Font.BOLD, 17));
-        title.setForeground(Color.WHITE);
-        title.setBounds(6, 2, 100, 25);
-        titleBar.add(title);
+    title = new JLabel("Calculator");
+    title.setBounds(6, 2, 150, 25); 
+    titleBar.add(title);
 
-        // Add title bar dragging
-        titleBar.addMouseListener(new MouseAdapter() {
-            public void mousePressed(MouseEvent evt) {
-                x = evt.getX();
-                y = evt.getY();
-            }
-        });
-        titleBar.addMouseMotionListener(new MouseAdapter() {
-            public void mouseDragged(MouseEvent evt) {
-                int xx = evt.getXOnScreen();
-                int yy = evt.getYOnScreen();
-                setLocation(xx - x, yy - y);
-            }
-        });
+    titleBar.addMouseListener(new MouseAdapter() {
+        public void mousePressed(MouseEvent evt) {
+            x = evt.getX();
+            y = evt.getY();
+        }
+    });
+    titleBar.addMouseMotionListener(new MouseAdapter() {
+        public void mouseDragged(MouseEvent evt) {
+            int xx = evt.getXOnScreen();
+            int yy = evt.getYOnScreen();
+            setLocation(xx - x, yy - y);
+        }
+    });
 
-        app.add(titleBar);
-        applyThemeToComponents();
+    app.add(titleBar);
+    
+    applyThemeToComponents();
 
-        // Set content pane
-        setContentPane(app);
-        pack();
-        setSize(320, 540);
-    }
+    // Set content pane
+    setContentPane(app);
+    pack();
+    setSize(320, 540);
+}
 
     private void saveState() {
         CalculatorMemento memento = new CalculatorMemento(currentOperand, previousOperand, operation);
@@ -372,22 +352,18 @@ public final class Calculator extends JFrame {
             });
             HoverDecorator.applyNumberHover(number, currentTheme);
             new ScaleHoverDecorator(number, 1.2f).apply();
-            ;
         }
 
         for (JButton op : operations) {
             HoverDecorator.applyOperationHover(op, currentTheme);
             new ScaleHoverDecorator(op, 1.3f).apply();
-            ;
         }
 
         HoverDecorator.applyNumberHover(btnDot, currentTheme);
         new ScaleHoverDecorator(btnDot, 1.2f).apply();
-        ;
 
         HoverDecorator.applyNumberHover(btnPlusSub, currentTheme);
         new ScaleHoverDecorator(btnPlusSub, 1.2f).apply();
-        ;
 
         HoverDecorator.applyCloseButtonHover(btnClose, currentTheme);
         HoverDecorator.applyMinimizeButtonHover(btnMini, currentTheme);
@@ -442,17 +418,14 @@ public final class Calculator extends JFrame {
     }
 
     private void addKeyboardShortcuts() {
-        this.addKeyListener(new KeyAdapter() {
+        app.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
-                // Ctrl+Z for Undo
                 if (e.isControlDown() && e.getKeyCode() == KeyEvent.VK_Z) {
                     undo();
-                } // Ctrl+Y for Redo
-                else if (e.isControlDown() && e.getKeyCode() == KeyEvent.VK_Y) {
+                } else if (e.isControlDown() && e.getKeyCode() == KeyEvent.VK_Y) {
                     redo();
-                } // Ctrl+T for Theme toggle
-                else if (e.isControlDown() && e.getKeyCode() == KeyEvent.VK_T) {
+                } else if (e.isControlDown() && e.getKeyCode() == KeyEvent.VK_T) {
                     toggleTheme();
                 }
             }
