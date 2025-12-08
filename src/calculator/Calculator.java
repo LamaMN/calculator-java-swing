@@ -57,9 +57,9 @@ public final class Calculator extends JFrame {
 
     private Calculator() {
         currentTheme = new DarkThemeStrategy(); // Start with dark theme
+        history = new CalculatorHistory();
         initComponents();
         rebuildButtonsWithTheme();
-        history = new CalculatorHistory();
         clear();
         addEventsWithDecorators();
         addKeyboardShortcuts();
@@ -435,8 +435,6 @@ private void initComponents() {
     }
 
     public void clear() {
-        saveState();
-
         currentOperand = "";
         previousOperand = "";
         operation = "";
@@ -493,8 +491,6 @@ private void initComponents() {
     }
 
     public void appendNumber(String number) {
-        saveState();
-
         if (currentOperand.equals("0") && number.equals("0")) {
             return;
         }
@@ -509,7 +505,6 @@ private void initComponents() {
     }
 
     public void chooseOperation(String op) {
-        saveState();
         if (currentOperand.isEmpty() && !previousOperand.isEmpty()) {
             operation = op;
             updateDisplay();
